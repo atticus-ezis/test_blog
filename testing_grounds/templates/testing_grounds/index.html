@@ -1,6 +1,8 @@
 <h1>This is where my models live</h1>
+<a href="{% url 'form' %}">Create Post</a>
 {% for blog in blogs %}
     <ul>
-        <li><h1>{{blog.title}}</h1>{{blog.text_content}}</li>
+        <h1>{{blog.title}}</h1> {{blog.pub_date}}
+        <li>{{blog.text_content}}</li>
     </ul>
 {% endfor %}
