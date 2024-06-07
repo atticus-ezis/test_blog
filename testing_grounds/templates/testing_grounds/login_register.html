@@ -1,3 +1,11 @@
+ 
+ <!-- login page -->
+ <ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% if page == 'login'%}
  <div>
     <form action="" method="POST">
         {% csrf_token %}
@@ -9,12 +17,20 @@
 
         <input type="submit" value="Login">
 
+        <p>create an account?<p>
+        <a href="{% url 'register' %}">register</a>
     </form>
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
  </div>
+{% else %}
+<!-- register page-->
+ <div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Register">
+
+    </form>
+    <p>already have an account?</p>
+    <a href="{% url 'login' %}">login</a>
+ </div>
+ {% endif %}
