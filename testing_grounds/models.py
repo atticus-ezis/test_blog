@@ -1,8 +1,8 @@
 from django.db import models
-from datetime import datetime
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
-# Create your models here.
+
 class Blog(models.Model):
     title = models.CharField(max_length=50, null=True, blank=True)
     text_content = models.TextField()

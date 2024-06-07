@@ -4,8 +4,29 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, FormView
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+
 from .models import Blog
-from .forms import BlogForm
+from .forms import BlogForm 
+
+def loginPage(request):
+    if request.method=="POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, "User does not exist")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+
+    context = {}
+    return render(request, 'testing_grounds/login_register.html', context)
 
 class index(ListView):
    model = Blog
@@ -39,6 +60,4 @@ def edit(request, pk):
     else:
         content = BlogForm(instance=selected_blog)
     return render(request, 'testing_grounds/submit_form.html', {'content':content})
-
-    
 
