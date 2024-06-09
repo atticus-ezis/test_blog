@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Blog
+from .models import Blog, Comment
 from .forms import BlogForm 
 
 def loginPage(request):
@@ -18,7 +18,7 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect('index')
     if request.method=="POST":
-        username = request.POST.get('username')  
+        username = request.POST.get('username').lower()  
         password = request.POST.get('password')
 
         try:
@@ -44,23 +44,23 @@ def registerUser(request):
     if request.method=='POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form#.save (commit=False)
-            #user.username = user.username.lower()
+            user = form.save (commit=False)
+            user.username = user.username.lower()
             user.save()
             login(request, user)
-            return redirect('home')
+            return redirect('index')
         else:
             messages.error(request, 'An error occured during registration')
     context = {'form':form}
     return render(request,'testing_grounds/login_register.html',context)
 
-class index(ListView):
-   model = Blog
-   template_name = 'testing_grounds/index.html'
-   context_object_name = 'blogs'
-   def get_queryset(self):
-       return Blog.objects.all().order_by('-pub_date')
+def index(request):
+   blogs = Blog.objects.get('-pub_date')
+   context = {'blogs':blogs, 'Comment':Comment}
+   return render(request, 'testing_grounds/index.html', context)
+   
 
+@login_required(login_url = 'login')
 def form(request):
     if request.method == 'POST':
         content = BlogForm(request.POST)
@@ -74,7 +74,7 @@ def form(request):
 @login_required(login_url='login')
 def delete(request, pk):
     blog = Blog.objects.get(id=pk)
-    #if request.user != Blog.host
+    #if request.user != Blog.user
         #return HttpResponse('You're not the author')
     blog.delete()
     return HttpResponseRedirect((reverse('index')))
@@ -82,7 +82,7 @@ def delete(request, pk):
 @login_required(login_url='login')
 def edit(request, pk):
     selected_blog = get_object_or_404(Blog, pk=pk)
-    #if request.user != Blog.host
+    #if request.user != Blog.user
         #return HttpResponse('You're not the author')
     if request.method == 'POST':
         form = BlogForm(request.POST, instance = selected_blog)

@@ -1,15 +1,19 @@
 <h1>This is where my models live</h1>
 
 {% if request.user.is_authenticated %}
+    <p>Welcome, {{user.username}}</p>
     <a href="{% url 'logout' %}">Logout</a>
 {% else %}
+    <p>Not a user?</p>
     <a href="{% url 'login'%}">Login</a>
 {% endif %} 
 
 <a href="{% url 'form' %}">Create Post</a>
 {% for blog in blogs %}
     <ul>
-        <h1>{{blog.title}}</h1> {{blog.pub_date}} {% if request.user == blog.host %}<a href="{% url 'edit' blog.id%}">edit</a> - <a href="{{blog.id}}/delete">delete</a> {% endif %}
+        <h1>{{blog.title}}</h1> {{blog.pub_date}} {% if request.user == blog.user %}<a href="{% url 'edit' blog.id%}">edit</a> - <a href="{{blog.id}}/delete">delete</a> {% endif %}
         <li>{{blog.text_content}}</li>
+        <p>- {{blog.user}}</p>
     </ul>
 {% endfor %}
+
