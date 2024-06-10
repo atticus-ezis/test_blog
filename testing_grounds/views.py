@@ -55,7 +55,7 @@ def registerUser(request):
     return render(request,'testing_grounds/login_register.html',context)
 
 def index(request):
-   blogs = Blog.objects.get('-pub_date')
+   blogs = Blog.objects.order_by('-pub_date')
    context = {'blogs':blogs, 'Comment':Comment}
    return render(request, 'testing_grounds/index.html', context)
    
@@ -65,6 +65,8 @@ def form(request):
     if request.method == 'POST':
         content = BlogForm(request.POST)
         if content.is_valid():
+            blog_post = content.save(commit=False)
+            blog_post.user = request.user
             content.save()
             return HttpResponseRedirect((reverse('index')))
     else:
