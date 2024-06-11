@@ -56,7 +56,8 @@ def registerUser(request):
 
 def index(request):
    blogs = Blog.objects.order_by('-pub_date')
-   context = {'blogs':blogs}
+   comment_form = CommentForm()
+   context = {'blogs':blogs, 'comment_form':comment_form}
    return render(request, 'testing_grounds/index.html', context)
    
 
@@ -102,16 +103,29 @@ def delete(request, pk, model_name):
         return HttpResponseRedirect((reverse('index')))
 
 @login_required(login_url='login')
-def edit(request, pk):
-    selected_blog = get_object_or_404(Blog, pk=pk)
-    #if request.user != Blog.user
-        #return HttpResponse('You're not the author')
-    if request.method == 'POST':
-        form = BlogForm(request.POST, instance = selected_blog)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect((reverse('index')))
-    else:
-        content = BlogForm(instance=selected_blog)
-    return render(request, 'testing_grounds/submit_form.html', {'content':content})
+def edit(request, pk, model_name):
+    if model_name == 'blog':
+        selected_blog = get_object_or_404(Blog, pk=pk)
+        if request.method == 'POST':
+            form = BlogForm(request.POST, instance = selected_blog)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect((reverse('index')))
+        else:
+            content = BlogForm(instance=selected_blog)
+        return render(request, 'testing_grounds/submit_form.html', {'content':content})
 
+    elif model_name == 'comment':
+        selected_comment = get_object_or_404(Comment, pk=pk)
+        if request.method == 'POST':
+            form = CommentForm(request.POST, instance = selected_comment)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect((reverse('index')))
+        else:
+            content = CommentForm(instance=selected_comment)
+        return render(request, 'testing_grounds/submit_form.html', {'content':content})
+
+
+    
+        

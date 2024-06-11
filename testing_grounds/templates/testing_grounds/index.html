@@ -14,7 +14,14 @@
     {% if user == blog.user %} <a href="{% url 'edit' blog.id %}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.text_content}}</p>
     <p>{{blog.user.username}}</p>
-    <a href="{% url 'comment' blog.id%}">comment</a>
+<!-- add comment bar -->
+    <form action="{% url 'comment' blog.id %}" method = "POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">comment</button>
+    </form>
+
+    <a href="{% url 'comment' blog.id %}">comment</a>
 
     {% if blog.comments.exists %}
         <ul>
@@ -24,7 +31,7 @@
                 <br>
                 <small>Published on: {{ comment.pub_date}}</small>
                 <br>
-                {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a>{% endif %}
+                {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a> -- <a href="{% url 'edit' comment.id 'comment' %}">edit</a>{% endif %}
             </li>
             {% endfor %}
         </ul>

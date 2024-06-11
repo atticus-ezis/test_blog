@@ -10,6 +10,6 @@ urlpatterns = [
     path('submit/', views.form, name="form"),
     path('<int:pk>/comment', views.comment, name="comment"),
     path('<int:pk>/<str:model_name>/delete', views.delete, name="delete"),
-    path('<int:pk>/edit', views.edit, name='edit'),
+    path('<int:pk>/<str:model_name>/edit', views.edit, name='edit'),
 ]
 

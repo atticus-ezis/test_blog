@@ -14,3 +14,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['text_content']
+        widgets = {
+            'text_content': forms.Textarea(attrs={
+                'cols': 40,  # Customize the width here
+                'rows': 1,   # Customize the height here
+            }),
+        }
