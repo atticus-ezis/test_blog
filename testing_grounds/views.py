@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import Blog, Comment
-from .forms import BlogForm 
+from .forms import BlogForm, CommentForm
 
 def loginPage(request):
     page = 'login'
@@ -56,7 +56,7 @@ def registerUser(request):
 
 def index(request):
    blogs = Blog.objects.order_by('-pub_date')
-   context = {'blogs':blogs, 'Comment':Comment}
+   context = {'blogs':blogs}
    return render(request, 'testing_grounds/index.html', context)
    
 
@@ -73,13 +73,33 @@ def form(request):
         content = BlogForm()
     return render(request, 'testing_grounds/submit_form.html', {'content':content})
 
+@login_required(login_url = 'login')
+def comment(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    if request.method == 'POST':
+        content = CommentForm(request.POST)
+        if content.is_valid():
+            comment_post = content.save(commit=False)
+            comment_post.user = request.user
+            comment_post.blog = blog
+            content.save()
+            return HttpResponseRedirect((reverse('index')))
+    else:
+        content = CommentForm()
+    return render(request, 'testing_grounds/submit_form.html', {'content':content})
+
 @login_required(login_url='login')
-def delete(request, pk):
-    blog = Blog.objects.get(id=pk)
+def delete(request, pk, model_name):
+    if model_name == 'blog':
+        blog = Blog.objects.get(id=pk)
     #if request.user != Blog.user
         #return HttpResponse('You're not the author')
-    blog.delete()
-    return HttpResponseRedirect((reverse('index')))
+        blog.delete()
+        return HttpResponseRedirect((reverse('index')))
+    if model_name == 'comment':
+        comment = Comment.objects.get(id=pk)
+        comment.delete()
+        return HttpResponseRedirect((reverse('index')))
 
 @login_required(login_url='login')
 def edit(request, pk):
