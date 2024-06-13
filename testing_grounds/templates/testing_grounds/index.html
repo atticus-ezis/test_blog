@@ -14,14 +14,15 @@
     {% if user == blog.user %} <a href="{% url 'edit' blog.id %}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.text_content}}</p>
     <p>{{blog.user.username}}</p>
+    <!-- likes -->
+     <a href="{% url 'like' blog.id%}">like</a>
+    <p>{{blog.likes}} likes</p>
 <!-- add comment bar -->
     <form action="{% url 'comment' blog.id %}" method = "POST">
         {% csrf_token %}
         {{ comment_form.as_p }}
         <button type="submit">comment</button>
     </form>
-
-    <a href="{% url 'comment' blog.id %}">comment</a>
 
     {% if blog.comments.exists %}
         <ul>

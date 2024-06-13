@@ -125,6 +125,12 @@ def edit(request, pk, model_name):
         else:
             content = CommentForm(instance=selected_comment)
         return render(request, 'testing_grounds/submit_form.html', {'content':content})
+    
+def like(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    blog.likes += 1
+    blog.save()
+    return redirect(request,  'testing_grounds/submit_form.html', {'likes':blog.likes})
 
 
     

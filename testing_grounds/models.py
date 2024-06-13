@@ -9,6 +9,7 @@ class Blog(models.Model):
     text_content = models.TextField()
     pub_date = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
+    likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
