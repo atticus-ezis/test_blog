@@ -130,7 +130,8 @@ def like(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
     blog.likes += 1
     blog.save()
-    return redirect(request,  'testing_grounds/submit_form.html', {'likes':blog.likes})
+    return HttpResponseRedirect((reverse('index')))
+
 
 
     
