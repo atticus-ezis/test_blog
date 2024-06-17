@@ -11,12 +11,12 @@
 <a href="{% url 'form' %}">Create Post</a>
  {% for blog in blogs %}
     <h1>{{blog.title}}</h1> <p>Published: {{blog.pub_date}}</p>
-    {% if user == blog.user %} <a href="{% url 'edit' blog.id %}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
+    {% if user == blog.user %} <a href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.text_content}}</p>
     <p>{{blog.user.username}}</p>
     <!-- likes -->
-     <a href="{% url 'like' blog.id%}">like</a>
-    <p>{{blog.likes}} likes</p>
+     <a href="{% url 'like' blog.id 'blog' %}">like</a>
+    <p>{{blog.likes}}</p>
 <!-- add comment bar -->
     <form action="{% url 'comment' blog.id %}" method = "POST">
         {% csrf_token %}
@@ -32,7 +32,11 @@
                 <br>
                 <small>Published on: {{ comment.pub_date}}</small>
                 <br>
-                {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a> -- <a href="{% url 'edit' comment.id 'comment' %}">edit</a>{% endif %}
+                {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a> -- <a href="{% url 'edit' comment.id 'comment' %}">edit</a>{% endif %} 
+                <br> 
+                <div class = "likes">
+                    <a href="{% url "like" comment.id 'comment' %}">like </a> <p>{{comment.likes}}</p>
+                </div>
             </li>
             {% endfor %}
         </ul>

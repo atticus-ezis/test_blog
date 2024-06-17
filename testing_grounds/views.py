@@ -126,11 +126,18 @@ def edit(request, pk, model_name):
             content = CommentForm(instance=selected_comment)
         return render(request, 'testing_grounds/submit_form.html', {'content':content})
     
-def like(request, pk):
-    blog = get_object_or_404(Blog, pk=pk)
-    blog.likes += 1
-    blog.save()
-    return HttpResponseRedirect((reverse('index')))
+def like(request, pk, model_name):
+    if model_name == 'blog':
+        blog = get_object_or_404(Blog, pk=pk)
+        blog.likes += 1
+        blog.save()
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        model_name == 'comment'
+        comment = get_object_or_404(Comment, pk=pk)
+        comment.likes += 1
+        comment.save()
+        return HttpResponseRedirect(reverse('index'))
 
 
 

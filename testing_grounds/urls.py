@@ -11,6 +11,6 @@ urlpatterns = [
     path('<int:pk>/comment', views.comment, name="comment"),
     path('<int:pk>/<str:model_name>/delete', views.delete, name="delete"),
     path('<int:pk>/<str:model_name>/edit', views.edit, name='edit'),
-    path('<int:pk>/like', views.like, name='like'),
+    path('<int:pk>/<str:model_name>/like', views.like, name='like'),
 ]
 

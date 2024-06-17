@@ -19,6 +19,7 @@ class Comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="comments")
     text_content = models.CharField(max_length=200)
     pub_date = models.DateTimeField(default=timezone.now)
+    likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.text_content
