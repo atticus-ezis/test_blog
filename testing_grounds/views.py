@@ -125,7 +125,8 @@ def edit(request, pk, model_name):
         else:
             content = CommentForm(instance=selected_comment)
         return render(request, 'testing_grounds/submit_form.html', {'content':content})
-    
+
+@login_required(login_url='login')   
 def like(request, pk, model_name):
     if model_name == 'blog':
         blog = get_object_or_404(Blog, pk=pk)
