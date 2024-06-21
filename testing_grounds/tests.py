@@ -30,18 +30,26 @@ class AuthorizedUserDelete(TestCase):
     def test_user_cant_delete_others_blog_post(self):
 
         # login as wrong user
-        self.client.login(username='user2', passeord='AguaHolic102')
+        self.client.login(username='user2', password='AguaHolic102')
 
         response = self.client.post(reverse('delete', args=[self.blog.id, 'blog']))
 
         self.assertEqual(response.status_code, 302)  # Assuming redirect after deletion
         self.assertTrue(Blog.objects.filter(id=self.blog.id).exists())
 
-    def test_user_can_delete_comment(self):
+    def test_author_can_delete_comment(self):
 
         self.client.login(username='user1', password='AugaHolic101')
         response = self.client.post(reverse('delete', args=[self.comment.id, 'comment']))
         self.assertEqual(response.status_code, 302)  # Assuming redirect after deletion
+        self.assertFalse(Comment.objects.filter(id=self.comment.id).exists())
+
+    def test_user_cant_delete_others_blog_post(self):
+
+        self.client.login(username='user2', password='AguaHolic102')
+        response = self.client.post(reverse('delete',args=[self.comment.id, 'blog']))
+
+        self.assertEqual(response.status_code, 302)
         self.assertFalse(Comment.objects.filter(id=self.comment.id).exists())
 
 

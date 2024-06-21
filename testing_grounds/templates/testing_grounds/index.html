@@ -12,8 +12,8 @@
 <a href="{% url 'form' %}">Create Post</a>
  {% for blog in blogs %}
     <h1>{{blog.title}}</h1> <p>Published: {{blog.pub_date}}</p>
-    {% if user == blog.user %} <a href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.text_content}}</p>
+    {% if user == blog.user %} <a href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.user.username}}</p>
     <!-- likes -->
      <a href="{% url 'like' blog.id 'blog' %}">like</a>
