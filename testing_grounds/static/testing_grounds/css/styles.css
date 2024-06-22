@@ -1,0 +1,62 @@
+body {
+    font-family: "Montserrat", sans-serif;
+}
+
+
+.montserrat {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+.btn {
+    background-color: #4c8baf; /* Green background */
+    border: none; /* Remove border */
+    color: white; /* White text */
+    padding: 15px 32px; /* Padding around text */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline from text */
+    display: inline-block; /* Inline-block for margin and padding */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin around button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.header {
+    display: flex;
+    background-color: rgb(0, 162, 255); /* Green background */
+    color: white; /* White text */
+    text-align: center; /* Centered text */
+    padding: 20px; /* Padding around the text */
+    font-family: Arial, sans-serif; /* Font family */
+}
+
+.login_container {
+    display: flex;
+}
+
+.login_header {
+    display: flex;
+    margin-left: auto;
+}
+
+.likes {
+    display: flex;
+}
+
+.likes-btn {
+    margin-right: 20px;
+    background-color: #4c8baf; /* Green background */
+    border: none; /* Remove border */
+    color: white; /* White text */
+    padding: 14px 12px; /* Padding around text */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline from text */
+    display: inline-block; /* Inline-block for margin and padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+
+}

@@ -1,23 +1,42 @@
-<link rel="stylesheet" href="styles.css">
-<h1>This is where my models live</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
 
-{% if request.user.is_authenticated %}
-    <p>Welcome, {{user.username}}</p>
-    <a href="{% url 'logout' %}">Logout</a>
-{% else %}
-    <p>Not a user?</p>
-    <a href="{% url 'login'%}">Login</a>
-{% endif %} 
+{% load static %}
+<div class='header'>
+    <link rel="stylesheet" href="{% static 'testing_grounds/css/styles.css' %}">
+    <h1 class='montserrat'>Blogs for the criminaly insane</h1>
+</div>
 
-<a href="{% url 'form' %}">Create Post</a>
+    <div class='login_container'>
+        {% if request.user.is_authenticated %}
+            <p>Welcome, {{user.username}}</p>
+        <div class="login_header">
+            <a class='btn' href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <p>Not a user?</p>
+            <a class='btn' href="{% url 'login'%}">Login</a>
+        {% endif %} 
+        </div>
+    </div>
+
+
+<a class = 'btn' href="{% url 'form' %}">Create Post</a>
  {% for blog in blogs %}
     <h1>{{blog.title}}</h1> <p>Published: {{blog.pub_date}}</p>
     <p>{{blog.text_content}}</p>
-    {% if user == blog.user %} <a href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
+    {% if user == blog.user %} <a class='btn' href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a class='btn' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
     <p>{{blog.user.username}}</p>
     <!-- likes -->
-     <a href="{% url 'like' blog.id 'blog' %}">like</a>
-    <p>{{blog.likes}}</p>
+    <div class='likes'>
+        <a class='likes-btn' href="{% url 'like' blog.id 'blog' %}">like</a>
+        <br>
+        <p>{{blog.likes}}</p>
+    </div>  
 <!-- add comment bar -->
     <form action="{% url 'comment' blog.id %}" method = "POST">
         {% csrf_token %}
