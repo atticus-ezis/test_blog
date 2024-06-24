@@ -12,5 +12,7 @@ urlpatterns = [
     path('<int:pk>/<str:model_name>/delete', views.delete, name="delete"),
     path('<int:pk>/<str:model_name>/edit', views.edit, name='edit'),
     path('<int:pk>/<str:model_name>/like', views.like, name='like'),
+    path('profile/', views.profile, name="profile"),
+    path('create_folder/', views.create_folder, name="create_folder")
 ]
 

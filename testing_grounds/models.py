@@ -22,6 +22,20 @@ class Comment(models.Model):
     likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.text_content
+        return self.text_content\
+        
+class Folder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=225)
+    blogs = models.ManyToManyField(Blog, related_name='folders')
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
 
 

@@ -1,0 +1,17 @@
+<h1>this is {{user.username}}'s Profile Page</h1>
+
+<div class = folder>
+    <p>Create Folder</p>
+    <form action="{% url 'create_folder' %}" method="POST">
+        {% csrf_token %}
+        {{folder_form.as_p}}
+        <button type="submit">Create Folder</button>
+    </form>
+</div>
+
+<div class="folders">
+    {% for folder in folders %}
+        <li>{{ folder.name }}</li>
+    {% endfor %}
+</div>
+
