@@ -13,13 +13,17 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Blog, Comment, Folder
 from .forms import BlogForm, CommentForm, FolderForm, AddBlogtoFolderForm
 
+def reader(request, pk):
+    blog = get_object_or_404(Blog,pk=pk)
+    context = {"blog":blog}
+    return render(request, 'testing_grounds/reader.html', context)
+
 @login_required(login_url='login')
 def profile(request):
     user = request.user
     folders = Folder.objects.filter(user=user)
     folder_form = FolderForm()
-    add_blog_to_folder_form = AddBlogtoFolderForm()
-    context = {'user':user, 'folder_form':folder_form, 'add_blog_to_folder_form':add_blog_to_folder_form, 'folders':folders}
+    context = {'user':user, 'folder_form':folder_form,'folders':folders}
     return render(request, 'testing_grounds/profile.html', context)
 
 def get_profile_context(request, folder_form):
@@ -79,7 +83,12 @@ def registerUser(request):
 def index(request):
    blogs = Blog.objects.order_by('-pub_date')
    comment_form = CommentForm()
-   context = {'blogs':blogs, 'comment_form':comment_form}
+   if request.user.is_authenticated:
+       folders = Folder.objects.filter(user=request.user)
+   else:
+       folders=None
+
+   context = {'blogs':blogs, 'comment_form':comment_form, 'folders':folders}
    return render(request, 'testing_grounds/index.html', context)
    
 
@@ -171,24 +180,22 @@ def create_folder(request):
             folder.user = request.user
             folder.save()
             return HttpResponseRedirect(reverse('profile'))
-        else:
-            form = FolderForm()
-        context = get_profile_context(request, form)
-        return render(request, 'testing_grounds/profile.html', context)
+    else:
+        return HttpResponseRedirect(reverse('profile'))
+        
 
 
 @login_required
-def add_blog_to_folder(request):
+def add_blog_to_folder(request, pk):
     if request.method == 'POST':
-        form = AddBlogtoFolderForm(request.POST, user=request.user)
-        if form.is_valid():
-            folder = form.cleaned_data['folder']
-            blog = form.cleaned_data['blog']
+        blog = get_object_or_404(Blog, pk=pk)
+        folder_id = request.POST.get('folder_id')
+        if folder_id:
+            folder = get_object_or_404(Folder, id=folder_id, user=request.user)
             folder.blogs.add(blog)
-            return redirect('folder_list')
+            return HttpResponseRedirect(reverse('index'))
     else:
-        form = AddBlogtoFolderForm(user=request.user)
-    return render(request, 'add_blog_to_folder.html', {'form': form})
+        return HttpResponseRedirect(reverse('index'))
 
 @login_required
 def folder_list(request):

@@ -9,9 +9,20 @@
     </form>
 </div>
 
+
 <div class="folders">
+    <h1>Folder - list </h1>
     {% for folder in folders %}
-        <li>{{ folder.name }}</li>
+        <li>
+            <strong>{{folder.name}}</strong>
+            <ul>
+                {% for blog in folder.blogs.all %}
+                    <li><a href="{% url 'reader' blog.id %}">{{ blog }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+    
+        
     {% endfor %}
 </div>
 

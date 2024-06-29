@@ -13,6 +13,8 @@ urlpatterns = [
     path('<int:pk>/<str:model_name>/edit', views.edit, name='edit'),
     path('<int:pk>/<str:model_name>/like', views.like, name='like'),
     path('profile/', views.profile, name="profile"),
-    path('create_folder/', views.create_folder, name="create_folder")
+    path('create_folder/', views.create_folder, name="create_folder"),
+    path('<int:pk>/add_folder/', views.add_blog_to_folder, name="add_to_folder"),
+    path('<int:pk>/reader', views.reader, name="reader"),
 ]
 
