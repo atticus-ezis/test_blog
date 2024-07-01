@@ -1,28 +1,49 @@
+<a href="{% url 'index' %}"> home </a>
+
 <h1>this is {{user.username}}'s Profile Page</h1>
 
-<div class = folder>
-    <p>Create Folder</p>
-    <form action="{% url 'create_folder' %}" method="POST">
-        {% csrf_token %}
-        {{folder_form.as_p}}
-        <button type="submit">Create Folder</button>
-    </form>
+<div class = "likes-counter" >
+    <a>Total blog likes</a>
+   {{total_blog_likes}}
+   <br>
+   <a>Total comment likes</a>
+   {{total_comment_likes}}
+
 </div>
+
+{% if request.user == user%}
+    <div class = folder>
+        <p>Create Folder</p>
+        <form action="{% url 'create_folder' %}" method="POST">
+            {% csrf_token %}
+            {{folder_form.as_p}}
+            <button type="submit">Create Folder</button>
+        </form>
+    </div>
+{% endif %}
 
 
 <div class="folders">
     <h1>Folder - list </h1>
     {% for folder in folders %}
-        <li>
             <strong>{{folder.name}}</strong>
             <ul>
                 {% for blog in folder.blogs.all %}
                     <li><a href="{% url 'reader' blog.id %}">{{ blog }}</a></li>
                 {% endfor %}
             </ul>
-        </li>
     
         
     {% endfor %}
 </div>
 
+<div class="blog_archive">
+    <h1>Contributions</h1>
+    {% for blog in blogs%}
+        <li>
+            <a href="{% url 'reader' blog.id %}">{{blog}}</a>
+
+            <p>likes {{blog.likes}}</p>
+        </li>
+    {% endfor %}
+</div>

@@ -16,5 +16,6 @@ urlpatterns = [
     path('create_folder/', views.create_folder, name="create_folder"),
     path('<int:pk>/add_folder/', views.add_blog_to_folder, name="add_to_folder"),
     path('<int:pk>/reader', views.reader, name="reader"),
+    path('<int:id>/<str:username>/view_profile', views.view_profile, name="view_profile"),
 ]
 

@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models import Sum
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -13,6 +14,19 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Blog, Comment, Folder
 from .forms import BlogForm, CommentForm, FolderForm, AddBlogtoFolderForm
 
+def view_profile(request, id, username):
+    user = get_object_or_404(User, id=id, username=username)
+    blogs = Blog.objects.filter(user=user).order_by('-likes')
+    comments = Comment.objects.filter(user=user)
+    folders = Folder.objects.filter(user=user)
+    folder_form = FolderForm()
+    total_blog_likes = blogs.aggregate(total_likes=Sum('likes'))['total_likes'] or 0
+    total_comment_likes = comments.aggregate(total_likes=Sum('likes'))['total_likes'] or 0
+    context = {'user':user, 'folder_form':folder_form, 'folders':folders, 'blogs':blogs, "total_blog_likes":total_blog_likes, 'total_comment_likes':total_comment_likes}
+    return render(request, 'testing_grounds/profile.html', context)
+    
+
+
 def reader(request, pk):
     blog = get_object_or_404(Blog,pk=pk)
     context = {"blog":blog}
@@ -21,9 +35,13 @@ def reader(request, pk):
 @login_required(login_url='login')
 def profile(request):
     user = request.user
+    blogs = Blog.objects.filter(user=user).order_by('-likes')
+    comments = Comment.objects.filter(user=user)
     folders = Folder.objects.filter(user=user)
     folder_form = FolderForm()
-    context = {'user':user, 'folder_form':folder_form,'folders':folders}
+    total_blog_likes = blogs.aggregate(total_likes=Sum('likes'))['total_likes'] or 0
+    total_comment_likes = comments.aggregate(total_likes=Sum('likes'))['total_likes'] or 0
+    context = {'user':user, 'folder_form':folder_form, 'folders':folders, 'blogs':blogs, "total_blog_likes":total_blog_likes, 'total_comment_likes':total_comment_likes}
     return render(request, 'testing_grounds/profile.html', context)
 
 def get_profile_context(request, folder_form):
