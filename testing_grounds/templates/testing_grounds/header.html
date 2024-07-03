@@ -1,0 +1,30 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+
+{% load static %}
+<div class='header'>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <h1 class='montserrat'>Blogs for the criminaly insane</h1>
+</div>
+
+    <div class='login_container'>
+        <div class="login_header">
+            {% if request.user.is_authenticated %}
+                <p>Welcome, {{user.username}}</p>
+                <a class ='btn' href="{%  url 'profile' %}">Profile</a>
+                <a class='btn' href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <p>Not a user?</p>
+                <a class='btn' href="{% url 'login'%}">Login</a>
+            {% endif %} 
+        </div>
+    </div>
+
+    {% block content %}
+
+    {% endblock %}

@@ -1,5 +1,7 @@
+{% extends 'testing_grounds/header.html'%}
 <form action="" method="post">
     {% csrf_token %}
     {{ content.as_p }}
     <button type="submit">Submit</button>
 </form>
+{% endblock %}

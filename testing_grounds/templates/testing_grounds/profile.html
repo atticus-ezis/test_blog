@@ -1,3 +1,6 @@
+{% extends 'testing_grounds/header.html'%}
+
+{% block content %}
 <a href="{% url 'index' %}"> home </a>
 
 <h1>this is {{user.username}}'s Profile Page</h1>
@@ -47,3 +50,4 @@
         </li>
     {% endfor %}
 </div>
+{%endblock%}
