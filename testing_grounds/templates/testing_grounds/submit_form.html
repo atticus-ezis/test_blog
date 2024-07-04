@@ -1,4 +1,5 @@
 {% extends 'testing_grounds/header.html'%}
+{% block content %}
 <form action="" method="post">
     {% csrf_token %}
     {{ content.as_p }}
