@@ -1,4 +1,5 @@
-{% load static tailwind_tags%}
+{% load crispy_forms_tags %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +8,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
-{% load static %}
-<div class='header'>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <h1 class='montserrat'>Blogs for the criminaly insane</h1>
-</div>
-
-{% tailwind_css %}
-
-    <div class='login_container'>
-        <div class="login_header">
+<div class="flex w-full p-4 bg-blue-400">
+    
+    <h1 class='text-center font-montserrat text-2xl text-white'>Blogs for the Criminaly Insane</h1>
+    <div class='ml-auto'>
+        <div class="text-white">
             {% if request.user.is_authenticated %}
+                
                 <p>Welcome, {{user.username}}</p>
                 <a class ='btn' href="{%  url 'profile' %}">Profile</a>
                 <a class='btn' href="{% url 'logout' %}">Logout</a>
+                
             {% else %}
-                <p>Not a user?</p>
-                <a class='btn' href="{% url 'login'%}">Login</a>
+                {% if request.path != "/login/"%}
+                <p class="pb-2">Not a user?</p>
+                <a class='btn btn-primary' href="{% url 'login'%}">Login</a>
+                {% endif %}
             {% endif %} 
         </div>
     </div>
+
+</div>
+<br>
+<div class="pl-5">
+    <a href="{% url 'index' %}" class="btn btn-primary">Back</a>
+</div>
+
+
+
+   
 
     {% block content %}
 
