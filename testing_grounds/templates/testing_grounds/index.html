@@ -1,20 +1,35 @@
 {% extends "testing_grounds/header.html" %}
-
 {% block content %}
-    {% load crispy_forms_tags %}
+{% load crispy_forms_tags %}
+{% load static tailwind_tags %}
+ 
 
-    <a class = 'btn' href="{% url 'form' %}">Create Post</a>
-    {% for blog in blogs %}
-        <h1>{{blog.title}}</h1> <p>Published: {{blog.pub_date}}</p>
-        <p>{{blog.text_content}}</p>
-        {% if user == blog.user %} <a class='btn' href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a class='btn' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
-        <p><a href="{% url 'view_profile' blog.user.id blog.user.username %}">{{blog.user.username}}</a></p>
-        <!-- likes -->
-        <div class='likes'>
-            <a class='likes-btn' href="{% url 'like' blog.id 'blog' %}">like</a>
-            <br>
-            <p>{{blog.likes}}</p>
-        </div>  
+    <a class = 'btn btn-primary' href="{% url 'form' %}">Create Post</a>
+
+    <div class="container mt-4">
+
+        {% for blog in blogs %}
+            <div class="card mb-4">
+
+                <div class="card-body">
+                    <h1 class="card-title">{{blog.title}}</h1> 
+                    <p class="card-subtitle text-muted mb-2">Published: {{blog.pub_date}}</p>
+                    <p class="card-text">{{blog.text_content}}</p>
+                    {% if user == blog.user %} <a class='btn btn-primary' href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a class='btn btn-primary' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
+                    <p class="btn btn-secondary"><a href="{% url 'view_profile' blog.user.id blog.user.username %}">{{blog.user.username}}</a></p>
+                </div> 
+
+                <!-- likes -->
+
+                <div class='container'>
+                    <div class="d-flex align-items-center">
+                        <a class='btn btn-primary' href="{% url 'like' blog.id 'blog' %}">like</a>
+                        <p class='pl-4 pt-2'>{{blog.likes}}</p>
+                    </div>
+                </div>
+                 
+            </div>
+    
 
         <!-- add to folder -->
 
@@ -43,6 +58,7 @@
             {{registerform|crispy}}
             <button type="submit">comment</button>
         </form>
+    </div>
 
         {% if blog.comments.exists %}
             <ul>
