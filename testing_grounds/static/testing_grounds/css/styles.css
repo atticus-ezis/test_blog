@@ -59,3 +59,12 @@ body {
     border-radius: 8px; /* Rounded corners */
 
 }
+
+.custom-container {
+    min-width: 300px;
+    padding-top: 1rem; /* Equivalent to pt-3 */
+    display: flex; /* Equivalent to d-flex */
+    justify-content: space-between; /* Equivalent to justify-content-between */
+    margin-left: auto;
+    margin-right: auto;
+}
