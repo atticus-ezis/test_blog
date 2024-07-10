@@ -4,7 +4,7 @@
 {% block content %}
 
 
-<div class="container">
+<div class="container pb-5">
     <a class = 'btn btn-primary' href="{% url 'form' %}">Create Post</a>
 </div>
 
@@ -19,34 +19,41 @@
                     <div class="d-flex justify-content-between">
 
                         <h1 class="card-title">{{blog.title}}</h1> 
+                        
 
                         <!-- folder -->
                         <div class='col-sm-2'>
                             <form action="{% url 'add_to_folder' blog.id %}"method="POST">
                                 {% csrf_token %}
-                                    <label for="dropdown">Add to Folder</label>
-                                        <select class = "form-control w-50" name="folder_id" id="dropdown">
+                                    <label for="dropdown" id="dropdown-label" style="cursor: pointer;">Add to Folder</label>
+                                        <select class = "form-control w-50" name="folder_id" id="dropdown" style="">
                                             {% if folders %}
                                                 {% for folder in folders%}
                                                     <option value="{{ folder.id }}">{{folder.name}}</option>
                                                 {% endfor %}
                                             {% else %}
+                                                <option value="{% url "profile"%}">Add folder</option>
                                                 <option disabled>No folders available</option>
                                             {% endif %}
                                         </select>
         
-                                        <button class="btn btn-primary p-2 btn-min-width"type="submit">Add</button>
+                                        <button class="btn btn-primary p-2 btn-min-width" id= "label-button" style="" type="submit">Add</button>
                             </form>
                         </div>
 
                     </div>
 
+                   
+
                     <p class="btn-link"><a href="{% url 'view_profile' blog.user.id blog.user.username %}">{{blog.user.username}}</a></p>
+                    
                     <p class="card-subtitle text-muted mb-2">Published: {{blog.pub_date}}</p>
+
                     <p class="card-text">{{blog.text_content}}</p>
-                    {% if user == blog.user %} <a class='btn btn-primary' href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a class='btn btn-primary' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
+                    
                     
                 </div> 
+               
 
                 <!-- likes -->
 
@@ -55,6 +62,10 @@
                     <div class="likes-class">
                         <a class='btn btn-primary p-2' href="{% url 'like' blog.id 'blog' %}">like</a>
                         <p class='pt-2 pl-2 mb-0'>{{blog.likes}}</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        {% if user == blog.user %} <a class='btn btn-primary p-2' href="{% url 'edit' blog.id 'blog'%}">edit</a><a class='btn btn-primary p-2' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
                     </div>
 
                 </div>
@@ -98,14 +109,8 @@
                         
 
             </div>
-    
-
-                
-   
-    
-
-       
 
         {% endfor %}
     </div>
- {% endblock %}
+{% endblock %}
+

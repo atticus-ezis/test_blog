@@ -66,7 +66,7 @@ body {
     display: flex; /* Equivalent to d-flex */
     justify-content: space-between; /* Equivalent to justify-content-between */
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: auto;
 }
 
 .likes-class{
@@ -88,6 +88,8 @@ body {
   
     padding-top: 15px;
     padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .btn-fixed-size {

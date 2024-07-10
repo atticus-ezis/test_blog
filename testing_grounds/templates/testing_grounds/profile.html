@@ -38,9 +38,12 @@
 
         {% for folder in folders %}
                 <div class="d-flex gap-3">
-                    <strong class="mr-3">{{folder.name}}</strong>
-                    {% if request.user == user %} <a href="{% url 'delete' folder.id 'folder' %}">delete</a> {% endif %} 
+                    <strong class="mr-3 folder_name" style="cursor:pointer;" data-folder-id="{{folder.id}}">{{folder.name}}</strong>
+                    {% if request.user == user %}
+                        <a href="{% url 'delete' folder.id 'folder' %}" style="display:none;" class="delete_folder" data-folder-id="{{folder.id}}">delete</a> 
+                    {% endif %} 
                 </div>
+                
                 <br> 
                 <ul>
                     {% for blog in folder.blogs.all %}
@@ -68,3 +71,30 @@
     </div>
 </div>
 {%endblock%}
+
+{% block extra_js %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            const folderNames = document.querySelectorAll(".folder_name");
+            const deleteLinks= document.querySelectorAll(".delete_folder");
+
+            folderNames.forEach(function(folderName){
+                folderName.addEventListener('click', function(){
+                    const folderId = folderName.getAttribute('data-folder-id');
+                    deleteLinks.forEach(function(deleteLink){
+                        if (deleteLink.getAttribute('data-folder-id') === folderId) {
+                            if (deleteLink.style.display == 'none') {
+                                deleteLink.style.display = 'block';
+                            } else {
+                                deleteLink.style.display = 'none';
+                            }
+
+                        }
+                        
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
+

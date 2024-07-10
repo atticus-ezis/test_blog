@@ -179,17 +179,26 @@ def edit(request, pk, model_name):
         
 @login_required(login_url='login')   
 def like(request, pk, model_name):
+    
     if model_name == 'blog':
         blog = get_object_or_404(Blog, pk=pk)
-        blog.likes += 1
-        blog.save()
-        return HttpResponseRedirect(reverse('index'))
+        user = blog.user
+
+        if user == request.user:
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            blog.likes += 1
+            blog.save()
+            return HttpResponseRedirect(reverse('index'))
     else:
-        model_name == 'comment'
         comment = get_object_or_404(Comment, pk=pk)
-        comment.likes += 1
-        comment.save()
-        return HttpResponseRedirect(reverse('index'))
+        user = comment.user
+        if user == request.user:
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            comment.likes += 1
+            comment.save()
+            return HttpResponseRedirect(reverse('index'))
 
 @login_required(login_url='login') 
 def create_folder(request):

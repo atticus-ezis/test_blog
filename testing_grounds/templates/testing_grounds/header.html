@@ -12,47 +12,52 @@
     <link rel="stylesheet" href="{% static 'testing_grounds/css/styles.css' %}"> 
 </head>
   
+<header class="w-100 bg-primary">
+    <div class="container pb-5">
+        
+        <div class='d-flex justify-content-between'>
 
-<div class="container pb-5">
-    
-    <div class='d-flex justify-content-between'>
+            <a href="{% url 'index' %}" class="text-decoration-none"> <h1 class='mt-4 fs-2'>Blogs for the Criminaly Insane</h1> </a>
 
-        <a href="{% url 'index' %}"> <h1 class='mt-4 fs-2'>Blogs for the Criminaly Insane</h1> </a>
+            <div class="pt-3">
 
-        <div class="col-1 pt-3 justify-content-between">
-
-            <div class="custom-container">
-            
-                {% if request.user.is_authenticated %}
-                    
-                    
-                    <a class ='btn btn-primary btn-fixed-size' href="{%  url 'profile' %}">Profile</a>
-                    <a class='btn btn-primary btn-fixed-size' href="{% url 'logout' %}">Logout</a>
-                    
-                {% else %}
-
-                {% if request.path != "/login/"%}
-                  
-                    <a class='btn btn-primary btn-fixed-size' href="{% url 'login'%}">Login</a>
+                <div class="custom-container">
                 
-                {% endif %}
+                    {% if request.user.is_authenticated %}
+                        
+                        
+                        <a class ='btn btn-primary btn-fixed-size' href="{%  url 'profile' %}">Profile</a>
+                        <a class='btn btn-primary btn-fixed-size' href="{% url 'logout' %}">Logout</a>
+                        
+                    {% else %}
 
-                {% if request.path != "/register/"%}
-                
-                    <a class='btn btn-primary btn-fixed-size' href="{% url 'register'%}">Signup</a>
+                    {% if request.path != "/login/"%}
                     
-                {% endif %}
-                {% endif %} 
+                        <a class='btn btn-primary btn-fixed-size' href="{% url 'login'%}">Login</a>
+                    
+                    {% endif %}
+
+                    {% if request.path != "/register/"%}
+                    
+                        <a class='btn btn-primary btn-fixed-size' href="{% url 'register'%}">Signup</a>
+                        
+                    {% endif %}
+                    {% endif %} 
+
+                </div>
 
             </div>
-
         </div>
+       
+</header>
+        {% if request.user.is_authenticated%}<p class="pr-2 pt-2 mr-2 container">Welcome, {{request.user.username}}</p>{% endif %}
+       
     </div>
-
-    <p class="pr-2 mr-2">Welcome, {{request.user.username}}</p>
-</div>
-<br>
+    <br>
 
     {% block content %}
 
+    {% endblock %}
+    {% block extra_js %}
+    <!-- Scripts will be inserted here -->
     {% endblock %}
