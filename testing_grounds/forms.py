@@ -20,6 +20,9 @@ class CommentForm(forms.ModelForm):
                 'rows': 1,   # Customize the height here
             }),
         }
+        labels = {
+            'text_content': '',  # Remove the label text
+        }
 
 class FolderForm(forms.ModelForm):
     class Meta:

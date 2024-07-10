@@ -1,6 +1,8 @@
 {% extends "testing_grounds/header.html" %}
-{% block content %}
 {% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
 
 <div class="container">
     <a class = 'btn btn-primary' href="{% url 'form' %}">Create Post</a>
@@ -9,77 +11,101 @@
     <div class="container mt-4">
 
         {% for blog in blogs %}
-            <div class="card-mb4">
+
+            <div class="card-mb4 pb-5">
 
                 <div class="card-body">
-                    <h1 class="card-title">{{blog.title}}</h1> 
+
+                    <div class="d-flex justify-content-between">
+
+                        <h1 class="card-title">{{blog.title}}</h1> 
+
+                        <!-- folder -->
+                        <div class='col-sm-2'>
+                            <form action="{% url 'add_to_folder' blog.id %}"method="POST">
+                                {% csrf_token %}
+                                    <label for="dropdown">Add to Folder</label>
+                                        <select class = "form-control w-50" name="folder_id" id="dropdown">
+                                            {% if folders %}
+                                                {% for folder in folders%}
+                                                    <option value="{{ folder.id }}">{{folder.name}}</option>
+                                                {% endfor %}
+                                            {% else %}
+                                                <option disabled>No folders available</option>
+                                            {% endif %}
+                                        </select>
+        
+                                        <button class="btn btn-primary p-2 btn-min-width"type="submit">Add</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <p class="btn-link"><a href="{% url 'view_profile' blog.user.id blog.user.username %}">{{blog.user.username}}</a></p>
                     <p class="card-subtitle text-muted mb-2">Published: {{blog.pub_date}}</p>
                     <p class="card-text">{{blog.text_content}}</p>
                     {% if user == blog.user %} <a class='btn btn-primary' href="{% url 'edit' blog.id 'blog'%}">edit</a> -- <a class='btn btn-primary' href="{% url 'delete' blog.id 'blog' %}">delete</a>{% endif %}
-                    <p class="btn btn-link"><a href="{% url 'view_profile' blog.user.id blog.user.username %}">{{blog.user.username}}</a></p>
+                    
                 </div> 
 
                 <!-- likes -->
 
-                <div class='col-1'>
-                    <div class="d-flex justify-content-between">
-                        <a class='btn btn-primary' href="{% url 'like' blog.id 'blog' %}">like</a>
-                        <p class='pt-2 mb-0'>{{blog.likes}}</p>
+                <div class='likes_n_folder'>
+
+                    <div class="likes-class">
+                        <a class='btn btn-primary p-2' href="{% url 'like' blog.id 'blog' %}">like</a>
+                        <p class='pt-2 pl-2 mb-0'>{{blog.likes}}</p>
                     </div>
+
                 </div>
-                 
+
+                <!-- comments -->
+
+                {% if blog.comments.exists %}
+                <ul>
+                    {% for comment in blog.comments.all %}
+                        <li>
+                            
+                            <strong class="btn-link"><a href="{% url 'view_profile' comment.user.id comment.user.username %}">{{comment.user.username}}</a></strong>
+                            <br>
+                            {{ comment.text_content }}
+                            <br>
+                            <small>Published on: {{ comment.pub_date}}</small>
+                            <br>
+                            {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a> -- <a href="{% url 'edit' comment.id 'comment' %}">edit</a>{% endif %} 
+                            <br> 
+                            
+                            <div class = "likes-class"> 
+                                <a class="btn btn-primary p-2" href="{% url "like" comment.id 'comment' %}">like </a> 
+                                <p class='pt-2 pl-2 mb-0'>{{comment.likes}}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>be the first to comment?</p>
+            {% endif %}
+                
+                <!-- add comment bar -->
+
+                <div class="pt-4">
+                    <form class = "col-3"action="{% url 'comment' blog.id %}" method = "POST">
+                        {% csrf_token %}
+                        {{comment_form|crispy }}
+                        <button class="btn btn-primary p-2"type="submit">comment</button>
+                    </form>
+                </div>
+                        
+
             </div>
     
 
-        <!-- add to folder -->
-
-                <div class='col-sm-4'>
-                    <form action="{% url 'add_to_folder' blog.id %}"method="POST">
-                            {% csrf_token %}
-                                <label for="dropdown">Add to Folder</label>
-                                    <select class = "form-control " name="folder_id" id="dropdown">
-                                        {% if folders %}
-                                            {% for folder in folders%}
-                                                <option value="{{ folder.id }}">{{folder.name}}</option>
-                                            {% endfor %}
-                                        {% else %}
-                                            <option disabled>No folders available</option>
-                                        {% endif %}
-                                    </select>
-                                    <br>
-                                    <button type="submit">Add</button>
-                    </form>
-                </div>
-    <!-- add comment bar -->
-        <form action="{% url 'comment' blog.id %}" method = "POST">
-            {% csrf_token %}
-            {{crip}}
-            {{ comment_form.as_p }}
-            {{registerform|crispy}}
-            <button type="submit">comment</button>
-        </form>
+                
+   
     
 
-        {% if blog.comments.exists %}
-            <ul>
-                {% for comment in blog.comments.all %}
-                <li>
-                    <strong>{{ comment.user.username}}</strong> <br> {{ comment.text_content }}
-                    <br>
-                    <small>Published on: {{ comment.pub_date}}</small>
-                    <br>
-                    {% if user == comment.user %} <a href="{% url 'delete' comment.id 'comment' %}">delete</a> -- <a href="{% url 'edit' comment.id 'comment' %}">edit</a>{% endif %} 
-                    <br> 
-                    <div class = "likes">
-                        <a class="likes-btn" href="{% url "like" comment.id 'comment' %}">like </a> 
-                        <p>{{comment.likes}}</p>
-                    </div>
-                </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>no comments</p>
-            {% endif %}
+       
+
         {% endfor %}
     </div>
  {% endblock %}

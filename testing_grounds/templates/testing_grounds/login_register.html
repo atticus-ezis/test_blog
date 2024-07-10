@@ -43,11 +43,11 @@
         {% csrf_token %}
         {{ form|crispy}}
 
-        <input type="submit" value="Register">
+        <input class="btn btn-primary p-2"type="submit" value="Register">
 
     </form>
     <p>already have an account?</p>
-    <a href="{% url 'login' %}">login</a>
+    <a class="btn btn-primary p-2"href="{% url 'login' %}">login</a>
  </div>
  {% endif %}
  {% endblock %}

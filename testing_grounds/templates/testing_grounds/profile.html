@@ -1,53 +1,70 @@
 {% extends 'testing_grounds/header.html'%}
+{% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
-<a href="{% url 'index' %}"> home </a>
 
-<h1>this is {{user.username}}'s Profile Page</h1>
+<div class="container">
 
-<div class = "likes-counter" >
-    <a>Total blog likes</a>
-   {{total_blog_likes}}
-   <br>
-   <a>Total comment likes</a>
-   {{total_comment_likes}}
+    {% if request.user != user %}
+        <p class="fs-4">{{user.username}}'s Profile Page</p>
+    {% endif %}
 
-</div>
 
-{% if request.user == user%}
-    <div class = folder>
-        <p>Create Folder</p>
-        <form action="{% url 'create_folder' %}" method="POST">
-            {% csrf_token %}
-            {{folder_form.as_p}}
-            <button type="submit">Create Folder</button>
-        </form>
+    <div class = "likes-counter" >
+
+        <a>Total blog likes: </a>
+        {{total_blog_likes}}
+        <br>
+        <a>Total comment likes: </a>
+        {{total_comment_likes}}
+
     </div>
-{% endif %}
 
+    {% if request.user == user%}
+        <div class ="mt-3" >
+            <p class="fs-4">Create Folder</p>
+            <form class="col-2"action="{% url 'create_folder' %}" method="POST">
+                {% csrf_token %}
+                {{folder_form|crispy}}
+                <button class="btn btn-primary p-2"type="submit">Create Folder</button>
+            </form>
+        </div>
+    {% endif %}
 
-<div class="folders">
-    <h1>Folder - list </h1>
-    {% for folder in folders %}
-            <strong>{{folder.name}}</strong>
-            <ul>
-                {% for blog in folder.blogs.all %}
-                    <li><a href="{% url 'reader' blog.id %}">{{ blog }}</a></li>
-                {% endfor %}
-            </ul>
-    
+    <div class="folders mt-3">
+
+        <p class="fs-4">Folders </p>
+
+        {% for folder in folders %}
+                <div class="d-flex gap-3">
+                    <strong class="mr-3">{{folder.name}}</strong>
+                    {% if request.user == user %} <a href="{% url 'delete' folder.id 'folder' %}">delete</a> {% endif %} 
+                </div>
+                <br> 
+                <ul>
+                    {% for blog in folder.blogs.all %}
+                        <li><a href="{% url 'reader' blog.id %}">{{ blog }}</a></li>
+                    {% endfor %}
+                </ul>
         
-    {% endfor %}
-</div>
+            
+        {% endfor %}
+    </div>
 
-<div class="blog_archive">
-    <h1>Contributions</h1>
-    {% for blog in blogs%}
-        <li>
-            <a href="{% url 'reader' blog.id %}">{{blog}}</a>
+    <div class="blog_archive">
+        <p class="fs-4">Contributions</p>
+            {% if blogs %}
+                {% for blog in blogs%}
+                    <li>
+                        <a href="{% url 'reader' blog.id %}">{{blog}}</a>
 
-            <p>likes {{blog.likes}}</p>
-        </li>
-    {% endfor %}
+                        <p>likes {{blog.likes}}</p>
+                    </li>
+                {% endfor %}
+            {% else %}
+                    <p>None</p>
+            {% endif %}
+    </div>
 </div>
 {%endblock%}

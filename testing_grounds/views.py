@@ -142,14 +142,16 @@ def comment(request, pk):
 def delete(request, pk, model_name):
     if model_name == 'blog':
         blog = Blog.objects.get(id=pk)
-    #if request.user != Blog.user
-        #return HttpResponse('You're not the author')
         blog.delete()
         return HttpResponseRedirect((reverse('index')))
     if model_name == 'comment':
         comment = Comment.objects.get(id=pk)
         comment.delete()
         return HttpResponseRedirect((reverse('index')))
+    if model_name == 'folder':
+        folder = Folder.objects.get(id=pk)
+        folder.delete()
+        return HttpResponseRedirect((reverse('profile')))
 
 @login_required(login_url='login')
 def edit(request, pk, model_name):
@@ -174,7 +176,7 @@ def edit(request, pk, model_name):
         else:
             content = CommentForm(instance=selected_comment)
         return render(request, 'testing_grounds/submit_form.html', {'content':content})
-
+        
 @login_required(login_url='login')   
 def like(request, pk, model_name):
     if model_name == 'blog':
