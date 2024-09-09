@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://bootswatch.com/5/cyborg/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'testing_grounds/css/styles.css' %}"> 
+    <link rel="stylesheet" href="{% static 'testing_grounds/css/styles.css' %}">  {% comment %} not present in deployment {% endcomment %}
 </head>
   
 <header class="w-100 bg-primary">
@@ -17,7 +17,7 @@
         
         <div class='d-flex justify-content-between'>
 
-            <a href="{% url 'index' %}" class="text-decoration-none"> <h1 class='mt-4 fs-2'>Blogs for the Criminaly Insane</h1> </a>
+            <a href="{% url 'index' %}" class="text-decoration-none"> <h1 class='mt-4 fs-2'>Blogs for the Criminally Insane</h1> </a>
 
             <div class="pt-3">
 
